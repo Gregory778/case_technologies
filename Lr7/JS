@@ -1,0 +1,469 @@
+let allRooms = [
+
+  {number:101,type:"Люкс"},
+  {number:102,type:"Стандарт"},
+  {number:103,type:"Эконом"},
+  {number:104,type:"Люкс"},
+  {number:105,type:"Стандарт"},
+  {number:106,type:"Эконом"},
+  {number:107,type:"Стандарт"},
+  {number:108,type:"Люкс"},
+  {number:109,type:"Эконом"},
+  {number:110,type:"Стандарт"},
+  {number:111,type:"Люкс"},
+  {number:112,type:"Эконом"},
+  {number:113,type:"Стандарт"},
+  {number:114,type:"Люкс"},
+  {number:115,type:"Эконом"},
+  {number:116,type:"Стандарт"},
+  {number:117,type:"Люкс"},
+  {number:118,type:"Эконом"},
+  {number:119,type:"Стандарт"},
+  {number:120,type:"Люкс"}
+
+];
+
+
+
+let bookings =
+JSON.parse(localStorage.getItem("bookings"));
+
+
+
+if(!bookings){
+
+  bookings = [
+
+    {
+      number:101,
+      type:"Люкс",
+      client:"Иванов Иван",
+      phone:"+375291111111",
+      checkin:"2025-05-01",
+      checkout:"2025-05-07"
+    },
+
+    {
+      number:102,
+      type:"Стандарт",
+      client:"Петров Пётр",
+      phone:"+375292222222",
+      checkin:"2025-05-03",
+      checkout:"2025-05-10"
+    },
+
+    {
+      number:103,
+      type:"Эконом",
+      client:"Сидоров Алексей",
+      phone:"+375293333333",
+      checkin:"2025-05-02",
+      checkout:"2025-05-06"
+    },
+
+    {
+      number:104,
+      type:"Люкс",
+      client:"Кузнецов Андрей",
+      phone:"+375294444444",
+      checkin:"2025-05-05",
+      checkout:"2025-05-12"
+    },
+
+    {
+      number:105,
+      type:"Стандарт",
+      client:"Морозов Илья",
+      phone:"+375295555555",
+      checkin:"2025-05-04",
+      checkout:"2025-05-09"
+    }
+
+  ];
+
+  localStorage.setItem(
+    "bookings",
+    JSON.stringify(bookings)
+  );
+
+}
+
+
+
+/* LOGIN */
+
+function adminLogin(){
+
+  let login =
+  document.getElementById("login").value;
+
+  let password =
+  document.getElementById("password").value;
+
+
+
+  if(
+    login === "admin"
+    &&
+    password === "1234"
+  ){
+
+    document.getElementById(
+      "loginPage"
+    ).style.display = "none";
+
+
+
+    document.getElementById(
+      "mainPage"
+    ).style.display = "block";
+
+
+
+    renderRooms();
+
+    updateRoomSelect();
+
+  }
+
+  else{
+
+    alert("Неверный логин");
+
+  }
+
+}
+
+
+
+/* LOGOUT */
+
+function logout(){
+
+  document.getElementById(
+    "mainPage"
+  ).style.display = "none";
+
+
+
+  document.getElementById(
+    "loginPage"
+  ).style.display = "flex";
+
+}
+
+
+
+/* ROOMS */
+
+function renderRooms(){
+
+  let container =
+  document.getElementById(
+    "roomsContainer"
+  );
+
+
+
+  container.innerHTML = "";
+
+
+
+  let busyCount = bookings.length;
+
+
+
+  // ЗАНЯТЫЕ
+
+  bookings.forEach((room,index) => {
+
+    container.innerHTML += `
+
+      <div class="room-card busy">
+
+        <h3>
+          Номер ${room.number}
+          — ${room.type}
+        </h3>
+
+        <p>
+          <strong>Статус:</strong>
+          Занят
+        </p>
+
+        <p>
+          <strong>Клиент:</strong>
+          ${room.client}
+        </p>
+
+        <p>
+          <strong>Телефон:</strong>
+          ${room.phone}
+        </p>
+
+        <p>
+          <strong>Заезд:</strong>
+          ${room.checkin}
+        </p>
+
+        <p>
+          <strong>Выезд:</strong>
+          ${room.checkout}
+        </p>
+
+        <button
+          class="delete-btn"
+          onclick="deleteBooking(${index})">
+
+          Удалить бронь
+
+        </button>
+
+      </div>
+
+    `;
+
+  });
+
+
+
+  // СВОБОДНЫЕ
+
+  allRooms.forEach(room => {
+
+    let busy =
+    bookings.find(
+      item => item.number == room.number
+    );
+
+
+
+    if(!busy){
+
+      container.innerHTML += `
+
+        <div class="room-card free">
+
+          <h3>
+            Номер ${room.number}
+            — ${room.type}
+          </h3>
+
+          <p>
+            <strong>Статус:</strong>
+            Свободен
+          </p>
+
+        </div>
+
+      `;
+
+    }
+
+  });
+
+
+
+  document.getElementById(
+    "busyRooms"
+  ).innerText = busyCount;
+
+
+
+  document.getElementById(
+    "freeRooms"
+  ).innerText =
+  20 - busyCount;
+
+}
+
+
+
+/* ROOM SELECT */
+
+function updateRoomSelect(){
+
+  let type =
+  document.getElementById(
+    "roomType"
+  ).value;
+
+
+
+  let roomSelect =
+  document.getElementById(
+    "roomNumber"
+  );
+
+
+
+  roomSelect.innerHTML = "";
+
+
+
+  let freeRooms =
+  allRooms.filter(room => {
+
+    let busy =
+    bookings.find(
+      item => item.number == room.number
+    );
+
+
+
+    return (
+      room.type === type
+      &&
+      !busy
+    );
+
+  });
+
+
+
+  freeRooms.forEach(room => {
+
+    roomSelect.innerHTML += `
+
+      <option>
+        ${room.number}
+      </option>
+
+    `;
+
+  });
+
+}
+
+
+
+/* ADD BOOKING */
+
+function addBooking(){
+
+  let client =
+  document.getElementById(
+    "clientName"
+  ).value;
+
+
+
+  let phone =
+  document.getElementById(
+    "clientPhone"
+  ).value;
+
+
+
+  let checkin =
+  document.getElementById(
+    "checkin"
+  ).value;
+
+
+
+  let checkout =
+  document.getElementById(
+    "checkout"
+  ).value;
+
+
+
+  let type =
+  document.getElementById(
+    "roomType"
+  ).value;
+
+
+
+  let number =
+  document.getElementById(
+    "roomNumber"
+  ).value;
+
+
+
+  if(client === ""){
+
+    alert("Введите ФИО");
+
+    return;
+
+  }
+
+
+
+  let booking = {
+
+    number:number,
+
+    type:type,
+
+    client:client,
+
+    phone:phone,
+
+    checkin:checkin,
+
+    checkout:checkout
+
+  };
+
+
+
+  bookings.push(booking);
+
+
+
+  localStorage.setItem(
+    "bookings",
+    JSON.stringify(bookings)
+  );
+
+
+
+  renderRooms();
+
+  updateRoomSelect();
+
+
+
+  alert(
+    "Бронь успешно добавлена"
+  );
+
+}
+
+
+
+/* DELETE BOOKING */
+
+function deleteBooking(index){
+
+  let confirmDelete =
+  confirm(
+    "Удалить бронь?"
+  );
+
+
+
+  if(confirmDelete){
+
+    bookings.splice(index,1);
+
+
+
+    localStorage.setItem(
+      "bookings",
+      JSON.stringify(bookings)
+    );
+
+
+
+    renderRooms();
+
+    updateRoomSelect();
+
+  }
+
+}
