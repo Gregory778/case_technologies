@@ -1,0 +1,169 @@
+<div id="loginPage" class="login-page">
+
+  <div class="login-card">
+
+    <div class="logo">
+      
+    </div>
+
+    <h1>Дом отдыха</h1>
+
+    <p>
+      Система управления бронированием
+    </p>
+
+    <input type="text"
+           id="login"
+           placeholder="Введите логин">
+
+    <input type="password"
+           id="password"
+           placeholder="Введите пароль">
+
+    <button onclick="adminLogin()">
+      Войти в систему
+    </button>
+
+    <div class="demo">
+      admin / 1234
+    </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+<div id="mainPage" style="display:none;">
+
+  <header>
+
+    <div>
+      <h1>Панель администратора</h1>
+      <p>Дом отдыха • Система учёта</p>
+    </div>
+
+    <button class="logout-btn"
+            onclick="logout()">
+
+      Выйти
+
+    </button>
+
+  </header>
+
+
+
+
+
+  <div class="stats">
+
+    <div class="stat-card total">
+
+      <h2>20</h2>
+
+      <p>Всего номеров</p>
+
+    </div>
+
+
+
+    <div class="stat-card free-stat">
+
+      <h2 id="freeRooms">15</h2>
+
+      <p>Свободно</p>
+
+    </div>
+
+
+
+    <div class="stat-card busy-stat">
+
+      <h2 id="busyRooms">5</h2>
+
+      <p>Занято</p>
+
+    </div>
+
+  </div>
+
+
+
+
+
+
+  <div class="main-grid">
+
+
+
+    <div class="rooms-section">
+
+      <h2>Информация о номерах</h2>
+
+      <div id="roomsContainer"></div>
+
+    </div>
+
+
+
+
+
+    <div class="booking-section">
+
+      <h2>Заселение клиента</h2>
+
+      <input type="text"
+             id="clientName"
+             placeholder="ФИО клиента">
+
+      <input type="text"
+             id="clientPhone"
+             placeholder="Номер телефона">
+
+      <input type="date"
+             id="checkin">
+
+      <input type="date"
+             id="checkout">
+
+
+
+      <select id="roomType"
+        onchange="updateRoomSelect()">
+
+  <option>Эконом</option>
+  <option>Стандарт</option>
+  <option>Люкс</option>
+
+</select>
+
+
+
+      <select id="roomNumber">
+
+        <option>106</option>
+        <option>107</option>
+        <option>108</option>
+        <option>109</option>
+        <option>110</option>
+        <option>111</option>
+        <option>112</option>
+
+      </select>
+
+
+
+      <button onclick="addBooking()">
+
+        Добавить бронь
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
